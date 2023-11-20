@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 type Cell = {
     text: string;
@@ -6,9 +6,11 @@ type Cell = {
 };
 
 const BingoCard: React.FC = () => {
-    const initialCells = Array(25).fill(null).map(() => ({ text: '', marked: false }));
+    const initialCells = Array(25).fill(null).map(() => ({text: '', marked: false}));
     const [cells, setCells] = useState<Cell[]>(initialCells);
     const [isLocked, setIsLocked] = useState(false);
+    const [focusedCell, setFocusedCell] = useState<number | null>(null);
+
 
     const handleInputChange = (index: number, value: string) => {
         if (!isLocked) {
@@ -34,21 +36,54 @@ const BingoCard: React.FC = () => {
         }
     };
 
-    const calculateFontSize = (text: string) => {
-        const baseSize = 18; // Base font size
-        const maxLength = 12; // Length at which to start reducing font size
-        if (text.length > maxLength) {
-            return Math.max(baseSize - (text.length - maxLength), 10); // Reduce font size for longer texts, minimum of 10px
-        }
-        return baseSize;
+    const handleFocus = (index: number) => {
+        setFocusedCell(index);
+    };
+
+    const handleBlur = () => {
+        setFocusedCell(null);
     };
 
     return (
         <div>
+            {focusedCell !== null && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 2
+                }}>
+                    <textarea
+                        value={cells[focusedCell].text}
+                        onChange={(e) => handleInputChange(focusedCell, e.target.value)}
+                        style={{
+                            resize: 'none',
+                            overflow: 'auto',
+                            padding: '20px',
+                            textAlign: 'center',
+                            fontSize: '20px',
+                            border: '3px solid #007bff',
+                            borderRadius: '10px',
+                            backgroundColor: '#fff',
+                            color: '#333',
+                            width: '50%',
+                            minHeight: '200px',
+                            boxSizing: 'border-box',
+                        }}
+                        onBlur={handleBlur}
+                    />
+                </div>
+            )}
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                maxWidth: '1400px',
+                maxWidth: '100%',
                 margin: 'auto',
                 justifyContent: 'center',
             }}>
@@ -56,27 +91,38 @@ const BingoCard: React.FC = () => {
                     <div key={index} style={{
                         position: 'relative',
                         margin: '5px',
-                        width: 'calc(20% - 10px)', // 20% for 5 items per row minus margin
-                        height: '100px', // fixed height
+                        width: 'calc(20% - 10px)',
+                        minHeight: '100px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        transform: focusedCell === index ? 'scale(1.1)' : 'scale(1)',
+                        transition: 'transform 0.3s ease',
+                        zIndex: focusedCell === index ? 1 : 0,
                     }}>
-                        <input
-                            type="text"
-                            value={cell.text}
-                            onChange={(e) => handleInputChange(index, e.target.value)}
-                            style={{
-                                padding: '10px',
-                                textAlign: 'center',
-                                fontSize: `${calculateFontSize(cell.text)}px`,
-                                border: '2px solid #007bff',
-                                borderRadius: '8px',
-                                backgroundColor: cell.marked ? '#90ee90' : '#f1f1f1',
-                                color: '#333',
-                                width: '100%',
-                                boxSizing: 'border-box',
-                                height: '100px'
-                            }}
-                            disabled={isLocked}
-                        />
+                     <textarea
+                         value={cell.text}
+                         onChange={(e) => handleInputChange(index, e.target.value)}
+                         style={{
+                             resize: 'none',
+                             overflow: 'auto',
+                             padding: '10px',
+                             textAlign: 'center',
+                             fontSize: '16px',
+                             border: '2px solid #007bff',
+                             borderRadius: '8px',
+                             backgroundColor: cell.marked ? '#90ee90' : '#f1f1f1',
+                             color: '#333',
+                             width: '100%',
+                             minHeight: '80px',
+                             boxSizing: 'border-box',
+                         }}
+                         onFocus={() => handleFocus(index)}
+                         onBlur={handleBlur}
+                         disabled={isLocked}
+                     />
+
                         <button onClick={() => toggleMarkCell(index)}
                                 style={{
                                     position: 'absolute',
@@ -101,12 +147,11 @@ const BingoCard: React.FC = () => {
                         </button>
                     </div>
                 ))}
-
             </div>
             <button
                 onClick={toggleLock}
                 disabled={!isLocked && cells.some(cell => cell.text.trim() === '')}
-                style={{ marginTop: '20px', padding: '10px 20px', fontSize: '16px' }}
+                style={{marginTop: '20px', padding: '10px 20px', fontSize: '16px'}}
             >
                 {isLocked ? 'Unlock Card' : 'Lock Card'}
             </button>
