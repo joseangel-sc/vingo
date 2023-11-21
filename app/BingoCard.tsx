@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import BingoModalText from "./BingoModalText";
 import BingoCell from "./BingoCell";
 
@@ -26,9 +26,9 @@ const BingoCard: React.FC = () => {
     useEffect(() => {
         const allCellsFilled = cells.every(cell => cell.text.trim() !== '');
         if (allCellsFilled && !isLocked) {
-            setIsLocked(false);
-        } else if (!allCellsFilled && isLocked) {
             setIsLocked(true);
+        } else if (!allCellsFilled && isLocked) {
+            setIsLocked(false);
         }
     }, [cells, isLocked]);
 
@@ -57,9 +57,7 @@ const BingoCard: React.FC = () => {
     };
 
     const toggleLock = () => {
-        if (!isLocked && cells.every(cell => cell.text.trim() !== '')) {
-            setIsLocked(true);
-        }
+        setIsLocked(!isLocked);
     };
 
     const handleFocus = (index: number) => {
@@ -78,7 +76,6 @@ const BingoCard: React.FC = () => {
         setFocusedCell(prev => (prev !== null && prev > 0) ? prev - 1 : prev);
     };
 
-
     return (
         <div>
             {focusedCell !== null && (
@@ -93,9 +90,9 @@ const BingoCard: React.FC = () => {
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                maxWidth: '100%',
-                margin: 'auto',
-                justifyContent: 'center',
+                justifyContent: 'space-around',
+                gap: '5px',
+                padding: '5px',
             }}>
                 {cells.map((cell, index) => (
                     <BingoCell
@@ -103,13 +100,13 @@ const BingoCard: React.FC = () => {
                         text={cell.text}
                         marked={cell.marked}
                         isLocked={isLocked}
-                        onTextChange={(newText) => handleInputChange(index, newText)}
+                        onTextChange={(newText: string) => handleInputChange(index, newText)}
                         onToggleMark={() => toggleMarkCell(index)}
                         onFocus={() => handleFocus(index)}
                         style={{
-                            margin: '5px',
-                            width: 'calc(20% - 8px)',
-                            minHeight: '100px',
+                            width: 'calc(25% - 10px)',
+                            minHeight: '120px',
+                            boxSizing: 'border-box',
                         }}
                     />
                 ))}
