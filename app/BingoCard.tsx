@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BingoModalText from "./BingoModalText";
 import BingoCell from "./BingoCell";
 
@@ -8,11 +8,29 @@ type Cell = {
 };
 
 const BingoCard: React.FC = () => {
-    const initialCells = Array(16).fill(null).map(() => ({text: '', marked: false}));
-    const [cells, setCells] = useState<Cell[]>(initialCells);
-    const [isLocked, setIsLocked] = useState(false);
+    // We use a function to lazily initialize the state to check for window
+    const [cells, setCells] = useState<Cell[]>(() => {
+        if (typeof window !== 'undefined') {
+            const savedCells = window.localStorage.getItem('cells');
+            return savedCells ? JSON.parse(savedCells) : Array(16).fill(null).map(() => ({ text: '', marked: false }));
+        }
+        return Array(16).fill(null).map(() => ({ text: '', marked: false }));
+    });
+    const [isLocked, setIsLocked] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return window.localStorage.getItem('isLocked') === 'true';
+        }
+        return false;
+    });
     const [focusedCell, setFocusedCell] = useState<number | null>(null);
 
+    // Using useEffect to sync state with local storage
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem('cells', JSON.stringify(cells));
+            window.localStorage.setItem('isLocked', JSON.stringify(isLocked));
+        }
+    }, [cells, isLocked]);
 
     const handleInputChange = (index: number, value: string) => {
         if (!isLocked) {
@@ -33,8 +51,6 @@ const BingoCard: React.FC = () => {
     const toggleLock = () => {
         if (!isLocked && cells.every(cell => cell.text.trim() !== '')) {
             setIsLocked(true);
-        } else if (isLocked) {
-            setIsLocked(false);
         }
     };
 

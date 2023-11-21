@@ -12,75 +12,81 @@ const BingoModalText: React.FC<BingoTextProps> = ({ text, onTextChange, onClose,
     return (
         <div style={{
             position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%',
+            maxWidth: '500px',
+            height: 'auto',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 2
+            zIndex: 2,
+            borderRadius: '10px',
         }}>
-            <div style={{ position: 'relative', display: 'inline-block' }}> {/* Ensure the container div is properly displayed */}
+            <div style={{
+                position: 'relative',
+                padding: '20px',
+                backgroundColor: '#fff',
+                borderRadius: '10px',
+                width: '100%',
+                boxSizing: 'border-box',
+            }}>
                 <textarea
                     value={text}
                     onChange={(e) => onTextChange(e.target.value)}
                     style={{
-                        resize: 'none',
-                        overflow: 'auto',
-                        padding: '20px',
-                        textAlign: 'center',
-                        fontSize: '20px',
-                        border: '3px solid #007bff',
-                        borderRadius: '10px',
-                        backgroundColor: '#fff',
-                        color: '#333',
-                        width: '50%',
-                        minHeight: '200px',
-                        boxSizing: 'border-box',
+                        width: '100%',
+                        minHeight: '150px',
+                        padding: '10px',
+                        margin: '0',
+                        border: '1px solid #007bff',
+                        borderRadius: '5px',
+                        fontSize: '26px',
+                        resize: 'vertical',
                     }}
-                    onBlur={onClose}
                 />
                 <button onClick={onClose} style={{
                     position: 'absolute',
                     top: '10px',
                     right: '10px',
-                    fontSize: '16px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ff0000',
+                    backgroundColor: '#dc3545',
                     color: 'white',
                     border: 'none',
+                    borderRadius: '50%',
                     cursor: 'pointer',
                     height: '30px',
                     width: '30px',
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center'
-                }}>X</button>
+                    alignItems: 'center',
+                }}> X </button>
                 <button onClick={onPrevious} style={{
                     position: 'absolute',
-                    left: '-50px',  // Move outside the writing area
-                    top: '50%',
-                    transform: 'translateY(-50%)', // Vertically center
-                    padding: '10px 20px',
-                    fontSize: '12px',
-                    backgroundColor: 'lightgray',
+                    left: '10px',
+                    bottom: '10px',
+                    backgroundColor: '#6c757d',
+                    color: 'white',
+                    padding: '5px 10px',
+                    fontSize: '24px',
                     border: 'none',
+                    borderRadius: '5px',
                     cursor: 'pointer',
-                }}>Previous</button>
+                }}> ⏪ </button>
 
                 <button onClick={onNext} style={{
                     position: 'absolute',
-                    right: '-50px', // Move outside the writing area
-                    top: '50%',
-                    transform: 'translateY(-50%)', // Vertically center
-                    padding: '10px 20px',
-                    fontSize: '12px',
-                    backgroundColor: 'lightgray',
+                    right: '10px',
+                    bottom: '10px',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    padding: '5px 10px',
+                    fontSize: '24px',
                     border: 'none',
+                    borderRadius: '5px',
                     cursor: 'pointer',
-                }}>Next</button>
+                }}> ⏩️️ </button>
             </div>
         </div>
     );
