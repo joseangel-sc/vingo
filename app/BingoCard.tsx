@@ -8,7 +8,6 @@ type Cell = {
 };
 
 const BingoCard: React.FC = () => {
-    // We use a function to lazily initialize the state to check for window
     const [cells, setCells] = useState<Cell[]>(() => {
         if (typeof window !== 'undefined') {
             const savedCells = window.localStorage.getItem('cells');
@@ -24,7 +23,6 @@ const BingoCard: React.FC = () => {
     });
     const [focusedCell, setFocusedCell] = useState<number | null>(null);
 
-    // Using useEffect to sync state with local storage
     useEffect(() => {
         if (typeof window !== 'undefined') {
             window.localStorage.setItem('cells', JSON.stringify(cells));
