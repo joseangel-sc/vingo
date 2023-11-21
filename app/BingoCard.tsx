@@ -24,6 +24,16 @@ const BingoCard: React.FC = () => {
     const [focusedCell, setFocusedCell] = useState<number | null>(null);
 
     useEffect(() => {
+        const allCellsFilled = cells.every(cell => cell.text.trim() !== '');
+        if (allCellsFilled && !isLocked) {
+            setIsLocked(false);
+        } else if (!allCellsFilled && isLocked) {
+            setIsLocked(true);
+        }
+    }, [cells, isLocked]);
+
+
+    useEffect(() => {
         if (typeof window !== 'undefined') {
             window.localStorage.setItem('cells', JSON.stringify(cells));
             window.localStorage.setItem('isLocked', JSON.stringify(isLocked));
@@ -106,7 +116,7 @@ const BingoCard: React.FC = () => {
             </div>
             <button
                 onClick={toggleLock}
-                disabled={!isLocked && cells.some(cell => cell.text.trim() === '')}
+                disabled={isLocked || !cells.every(cell => cell.text.trim() !== '')}
                 style={{marginTop: '20px', fontSize: '16px'}}
             >
                 {isLocked ? '🔒' : '🔓'}
