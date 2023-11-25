@@ -1,5 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+type BingoCellProps = {
+    text: string;
+    marked: boolean;
+    isLocked: boolean;
+    onTextChange: (newText: string) => void;
+    onToggleMark: () => void;
+    onFocus: () => void;
+    style?: React.CSSProperties;
+}
+
 const BingoCell: React.FC<BingoCellProps> = ({
                                                  text,
                                                  marked,
@@ -48,7 +58,7 @@ const BingoCell: React.FC<BingoCellProps> = ({
                     resize: 'none',
                     overflow: 'auto',
                     textAlign: 'center',
-                    backgroundColor: 'inherit',
+                    backgroundColor: marked ? 'lightgreen' : 'inherit',
                     color: '#333',
                     width: '100%',
                     minHeight: '80px',
