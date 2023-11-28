@@ -78,12 +78,6 @@ const BingoCard: React.FC = () => {
             window.localStorage.setItem('isLocked', JSON.stringify(isLocked));
         }
     }, [cells, isLocked]);
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            window.localStorage.setItem('cells', JSON.stringify(cells));
-            window.localStorage.setItem('isLocked', JSON.stringify(isLocked));
-        }
-    }, [cells, isLocked]);
 
     const fetchSavedData = async (hash: string) => {
         try {
@@ -184,7 +178,7 @@ const BingoCard: React.FC = () => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
-                gap: '5px',
+                gap: '10px',
                 padding: '5px',
             }}>
                 {cells.map((cell, index) => (
@@ -207,7 +201,7 @@ const BingoCard: React.FC = () => {
             <button
                 onClick={toggleLock}
                 disabled={isLocked || !cells.every(cell => cell.text.trim() !== '')}
-                style={{marginTop: '20px', fontSize: '16px'}}
+                style={{ marginTop: '20px', fontSize: '16px' }}
             >
                 {isLocked ? '🔒' : '🔓'}
             </button>

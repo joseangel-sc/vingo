@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { colors } from './styles/colors';
 
 type BingoCellProps = {
     text: string;
@@ -11,14 +12,14 @@ type BingoCellProps = {
 }
 
 const BingoCell: React.FC<BingoCellProps> = ({
-                                                 text,
-                                                 marked,
-                                                 isLocked,
-                                                 onTextChange,
-                                                 onToggleMark,
-                                                 onFocus,
-                                                 style
-                                             }) => {
+    text,
+    marked,
+    isLocked,
+    onTextChange,
+    onToggleMark,
+    onFocus,
+    style
+}) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const [fontSize, setFontSize] = useState(16);
 
@@ -49,7 +50,7 @@ const BingoCell: React.FC<BingoCellProps> = ({
     }, [fontSize]);
 
     return (
-        <div style={{ ...style, position: 'relative', border: '1px solid #333', borderRadius: '5px', padding: '10px' }}>
+        <div style={{ ...style, position: 'relative', boxShadow: `6px 4px 5px 2px #3332`, borderRadius: '5px', padding: '10px', backgroundColor: colors.primary }}>
             <textarea
                 ref={textAreaRef}
                 value={text}
@@ -59,11 +60,12 @@ const BingoCell: React.FC<BingoCellProps> = ({
                     overflow: 'auto',
                     textAlign: 'center',
                     backgroundColor: marked ? 'lightgreen' : 'inherit',
-                    color: '#333',
+                    color: colors.accentOne,
                     width: '100%',
                     minHeight: '80px',
                     boxSizing: 'border-box',
                     border: 'none',
+                    appearance: "none"
                 }}
                 onFocus={onFocus}
                 disabled={isLocked}
@@ -71,7 +73,7 @@ const BingoCell: React.FC<BingoCellProps> = ({
             />
 
             {isLocked && (
-            <button onClick={onToggleMark}
+                <button onClick={onToggleMark}
                     style={{
                         position: 'absolute',
                         top: '0px',
@@ -90,9 +92,9 @@ const BingoCell: React.FC<BingoCellProps> = ({
                         alignItems: 'center'
                     }}
                     tabIndex={-1}
-            >
-                ✓
-            </button> )}
+                >
+                    ✓
+                </button>)}
         </div>
     );
 };
